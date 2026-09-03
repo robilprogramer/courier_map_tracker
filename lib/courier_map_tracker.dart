@@ -1,23 +1,130 @@
+/// A Flutter package for displaying dynamic courier delivery route tracking with interactive map navigation.
+///
+/// This package provides a comprehensive widget for real-time courier delivery tracking,
+/// displaying customer locations, courier positions, and service details on an interactive map.
+/// It integrates with Flutter Map for mapping and Map Launcher for external navigation.
+///
+/// ## Features
+/// - Display customer and courier locations on an interactive map
+/// - Real-time courier tracking with marker updates
+/// - Direct navigation integration using native map applications
+/// - Customer contact functionality with phone button
+/// - Delivery completion confirmation workflow
+/// - Responsive design with rounded UI panels
+/// - Support for various service types and delivery details
+///
+/// ## Usage
+/// ```dart
+/// CourierDeliveryMap(
+///   customerLat: -6.200000,
+///   customerLng: 106.816666,
+///   customerName: "John Doe",
+///   customerAddress: "123 Main St, Jakarta",
+///   serviceDetail: "Laundry 5kg",
+///   onDeliveryCompleted: () => print("Delivery completed"),
+/// )
+/// ```
+///
+/// See [CourierDeliveryMap] for more details and complete API documentation.
+library courier_map_tracker;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 // Gunakan alias 'ml' agar tidak ada bentrok nama dengan file/class lokal Anda
 import 'package:map_launcher/map_launcher.dart' as ml;
 
+/// A widget that displays a real-time courier delivery tracking map.
+///
+/// [CourierDeliveryMap] is a stateless widget that shows an interactive map
+/// with customer and courier locations, along with delivery details and action buttons.
+/// It uses OpenStreetMap tiles via Flutter Map and supports direct navigation
+/// through native map applications via Map Launcher.
+///
+/// The widget displays:
+/// - An interactive map centered on the customer location
+/// - A red marker for the customer's delivery address
+/// - A blue marker for the courier's current location (if provided)
+/// - A bottom panel with customer details, service information, and action buttons
+///
+/// ## Parameters
+/// - [customerLat], [customerLng]: Required customer location coordinates
+/// - [courierLat], [courierLng]: Optional courier current location coordinates
+/// - [customerName]: The name of the customer receiving the delivery
+/// - [customerAddress]: The full delivery address
+/// - [serviceDetail]: Description of the service/items being delivered
+/// - [onDeliveryCompleted]: Callback triggered when delivery is marked as complete
+/// - [onContactCustomer]: Optional callback for contacting the customer
+/// - [destinationTitle]: Label for the customer location marker (default: "Lokasi Pelanggan")
+///
+/// ## Example
+/// ```dart
+/// CourierDeliveryMap(
+///   customerLat: -6.200000,
+///   customerLng: 106.816666,
+///   courierLat: -6.201000,
+///   courierLng: 106.817000,
+///   customerName: "Robil Dev",
+///   customerAddress: "Jl. Kebon Jeruk Raya No. 12, Jakarta Barat",
+///   serviceDetail: "Laundry Kiloan 5kg + Setrika",
+///   onDeliveryCompleted: () {
+///     print("Delivery completed!");
+///   },
+///   onContactCustomer: () {
+///     print("Calling customer...");
+///   },
+/// )
+/// ```
 class CourierDeliveryMap extends StatelessWidget {
+  /// The latitude coordinate of the customer's delivery location.
   final double customerLat;
+
+  /// The longitude coordinate of the customer's delivery location.
   final double customerLng;
+
+  /// The latitude coordinate of the courier's current location.
+  ///
+  /// If null, the courier marker will not be displayed on the map.
   final double? courierLat;
+
+  /// The longitude coordinate of the courier's current location.
+  ///
+  /// If null, the courier marker will not be displayed on the map.
   final double? courierLng;
 
+  /// The name of the customer receiving the delivery.
   final String customerName;
+
+  /// The full delivery address of the customer.
   final String customerAddress;
+
+  /// Description of the service or items being delivered.
+  ///
+  /// Example: "Laundry Kiloan 5kg + Setrika", "Express Delivery", etc.
   final String serviceDetail;
+
+  /// The title/label for the customer location marker on the map.
+  ///
+  /// Defaults to "Lokasi Pelanggan" (Customer Location in Indonesian).
   final String destinationTitle;
 
+  /// Callback triggered when the "Selesaikan" (Complete) button is pressed.
+  ///
+  /// This callback should handle delivery completion logic, such as updating
+  /// the delivery status in the backend database or closing the delivery screen.
   final VoidCallback onDeliveryCompleted;
+
+  /// Optional callback triggered when the phone icon button is pressed.
+  ///
+  /// If null, the phone button will not be displayed in the UI.
+  /// This callback typically handles initiating a call to the customer.
   final VoidCallback? onContactCustomer;
 
+  /// Creates a [CourierDeliveryMap] widget.
+  ///
+  /// The [customerLat], [customerLng], [customerName], [customerAddress],
+  /// [serviceDetail], and [onDeliveryCompleted] parameters are required.
+  /// All other parameters are optional.
   const CourierDeliveryMap({
     super.key,
     required this.customerLat,

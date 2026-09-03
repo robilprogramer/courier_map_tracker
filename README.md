@@ -1,52 +1,339 @@
 # Courier Map Tracker
 
-Widget Flutter untuk menampilkan lokasi pelanggan dan kurir pada peta, lalu
-membantu kurir membuka lokasi pelanggan di aplikasi peta yang tersedia pada
-perangkat.
+A comprehensive Flutter package for displaying dynamic courier delivery route tracking with interactive map navigation.
 
-Paket ini cocok untuk aplikasi laundry, pengantaran makanan, logistik, dan
-aplikasi lain yang memiliki pesanan aktif dengan tujuan pengantaran.
+![Flutter Badge](https://img.shields.io/badge/Flutter-3.13+-blue)
+![Dart Badge](https://img.shields.io/badge/Dart-3.13+-blue)
+![License Badge](https://img.shields.io/badge/License-MIT-green)
 
-## Fitur
+## Overview
 
-- Menampilkan peta OpenStreetMap.
-- Menampilkan marker lokasi pelanggan.
-- Menampilkan marker kurir secara opsional.
-- Membuka lokasi pelanggan pada aplikasi navigasi yang tersedia.
-- Menampilkan nama pelanggan, alamat, dan detail layanan.
-- Callback untuk menghubungi pelanggan.
-- Callback untuk menandai pengantaran sebagai selesai.
-- Layout responsif dengan panel informasi di bagian bawah peta.
+**courier_map_tracker** is a production-ready Flutter widget package that enables real-time courier delivery tracking with an interactive map interface. Perfect for delivery applications, food delivery platforms, laundry services, and any business requiring live order tracking.
 
-## Persyaratan
+Paket ini cocok untuk aplikasi laundry, pengantaran makanan, logistik, dan aplikasi lain yang memiliki pesanan aktif dengan tujuan pengantaran.
 
-- Flutter dengan Dart SDK `^3.13.1`.
-- Aplikasi Android atau iOS dengan aplikasi peta yang dapat digunakan untuk
-  navigasi.
-- Koneksi internet untuk memuat tile OpenStreetMap.
+### Key Features / Fitur Utama
 
-## Instalasi
+✨ **Interactive Map Display / Tampilan Peta Interaktif**
+- Real-time map rendering using OpenStreetMap tiles
+- Smooth zoom and pan controls
+- Responsive to different screen sizes
+- Menampilkan peta OpenStreetMap secara real-time dengan kontrol zoom dan pan
 
-Tambahkan paket ke `pubspec.yaml` aplikasi Anda:
+📍 **Dual Location Markers / Marker Lokasi Ganda**
+- Red marker for customer delivery location
+- Blue marker for courier's current position
+- Clear visual distinction between locations
+- Marker merah untuk lokasi pelanggan, marker biru untuk posisi kurir
+
+👤 **Customer Information Panel / Panel Informasi Pelanggan**
+- Customer name and avatar
+- Service/order details display
+- Full delivery address with icon
+- Clean, modern UI with rounded corners
+- Menampilkan nama pelanggan, detail layanan, dan alamat lengkap
+
+📞 **Communication Features / Fitur Komunikasi**
+- Direct phone button to contact customer
+- Customizable contact callback
+- Optional callback handling
+- Tombol untuk menghubungi pelanggan
+
+🎯 **Action Buttons / Tombol Aksi**
+- Navigation button for GPS integration
+- Delivery completion confirmation
+- Customizable action callbacks
+- Dialog-based confirmation workflow
+- Tombol navigasi dan penyelesaian pengiriman
+
+## Installation / Instalasi
+
+Add `courier_map_tracker` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  courier_map_tracker: ^0.0.1
+  courier_map_tracker: ^1.0.0
 ```
 
-Kemudian jalankan:
+Then run:
 
 ```bash
 flutter pub get
 ```
 
-Untuk memakai versi lokal saat mengembangkan paket ini, gunakan:
+### Platform Support
+
+| Platform | Support | Minimum Version |
+|----------|---------|-----------------|
+| Android  | ✅      | API 21          |
+| iOS      | ✅      | 12.0            |
+| Web      | ⚠️      | Supported       |
+| Windows  | ⚠️      | Experimental    |
+| macOS    | ⚠️      | Experimental    |
+| Linux    | ⚠️      | Experimental    |
+
+## Quick Start / Mulai Cepat
+
+### Basic Usage
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:courier_map_tracker/courier_map_tracker.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Delivery Tracker',
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Active Delivery')),
+        body: CourierDeliveryMap(
+          customerLat: -6.200000,
+          customerLng: 106.816666,
+          customerName: 'John Doe',
+          customerAddress: '123 Main Street, Jakarta',
+          serviceDetail: 'Laundry Service 5kg',
+          onDeliveryCompleted: () {
+            print('Delivery completed!');
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Advanced Usage with Courier Location
+
+```dart
+CourierDeliveryMap(
+  // Customer location (required)
+  customerLat: -6.200000,
+  customerLng: 106.816666,
+  
+  // Courier current location (optional)
+  courierLat: -6.195000,
+  courierLng: 106.820000,
+  
+  // Customer details (required)
+  customerName: 'Robil Dev',
+  customerAddress: 'Jl. Kebon Jeruk Raya No. 12, Jakarta Barat',
+  serviceDetail: 'Laundry Kiloan 5kg + Setrika',
+  
+  // Location marker title (optional, default: "Lokasi Pelanggan")
+  destinationTitle: 'Customer Address',
+  
+  // Callbacks (onDeliveryCompleted required)
+  onDeliveryCompleted: () {
+    // Update delivery status in database
+    // Navigate to next order
+    // Show completion screen
+  },
+  
+  onContactCustomer: () {
+    // Integrate with url_launcher to make calls
+    // launch('tel:+62812345678');
+  },
+)
+```
+
+## API Reference
+
+### CourierDeliveryMap
+
+A stateless widget that displays a real-time courier delivery tracking interface.
+
+#### Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `customerLat` | `double` | Customer's delivery location latitude |
+| `customerLng` | `double` | Customer's delivery location longitude |
+| `customerName` | `String` | Name of the customer receiving delivery |
+| `customerAddress` | `String` | Full delivery address |
+| `serviceDetail` | `String` | Description of service/items being delivered |
+| `onDeliveryCompleted` | `VoidCallback` | Callback when delivery completion button is pressed |
+
+#### Optional Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `courierLat` | `double?` | `null` | Courier's current latitude |
+| `courierLng` | `double?` | `null` | Courier's current longitude |
+| `onContactCustomer` | `VoidCallback?` | `null` | Callback when contact button is pressed |
+| `destinationTitle` | `String` | `"Lokasi Pelanggan"` | Label for customer location marker |
+
+## Dependencies
 
 ```yaml
-dependencies:
-  courier_map_tracker:
-    path: ../courier_map_tracker
+flutter_map: ^8.3.2        # Interactive map widget
+latlong2: ^0.10.1          # Geographic coordinates
+map_launcher: ^6.0.0       # Native map application integration
 ```
+
+## Examples / Contoh
+
+See the [example](./example) directory for a complete working application demonstrating all features.
+
+### Running the Example
+
+```bash
+cd example
+flutter pub get
+flutter run
+```
+
+## Customization / Kustomisasi
+
+### Modifying Colors and Styling
+
+To customize marker colors, modify the icon colors in the `MarkerLayer`:
+
+```dart
+// Red marker for customer (default)
+child: const Icon(
+  Icons.location_on,
+  color: Colors.red,    // Change this
+  size: 50,
+)
+
+// Blue marker for courier (default)
+child: const Icon(
+  Icons.delivery_dining,
+  color: Colors.blue,   // Change this
+  size: 50,
+)
+```
+
+### Custom Map Tiles
+
+Replace the OpenStreetMap URL in the `TileLayer`:
+
+```dart
+TileLayer(
+  urlTemplate: 'https://your-tile-provider.com/{z}/{x}/{y}.png',
+  userAgentPackageName: 'com.your_app.package',
+)
+```
+
+### Integration with url_launcher
+
+To enable actual phone calls:
+
+```dart
+import 'package:url_launcher/url_launcher.dart';
+
+CourierDeliveryMap(
+  // ... other parameters
+  onContactCustomer: () async {
+    final phoneNumber = 'tel:+62812345678';
+    if (await canLaunch(phoneNumber)) {
+      await launch(phoneNumber);
+    }
+  },
+)
+```
+
+## Architecture
+
+### Widget Hierarchy
+
+```
+CourierDeliveryMap (StatelessWidget)
+├── Scaffold
+│   └── Stack
+│       ├── FlutterMap
+│       │   ├── TileLayer (OpenStreetMap)
+│       │   └── MarkerLayer
+│       │       ├── Customer Marker (Red)
+│       │       └── Courier Marker (Blue, if provided)
+│       └── Align (Bottom)
+│           └── SafeArea
+│               └── Container (Info Panel)
+│                   ├── Customer Info Row
+│                   ├── Divider
+│                   ├── Address Row
+│                   └── Action Buttons Row
+│                       ├── Navigation Button
+│                       └── Completion Button
+```
+
+## Performance Considerations
+
+- **Map Rendering**: Uses efficient tile-based rendering
+- **Marker Updates**: Rebuild only when coordinates change
+- **Memory Usage**: Optimized marker layer with conditional rendering
+- **Network**: Uses OpenStreetMap CDN with configurable user agent
+
+## Troubleshooting / Pemecahan Masalah
+
+### Map Not Displaying
+
+Ensure you have internet connectivity for loading map tiles and have proper permissions set:
+
+**Android** (`android/app/src/main/AndroidManifest.xml`):
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+**iOS** (`ios/Runner/Info.plist`):
+```xml
+<key>NSLocalNetworkUsageDescription</key>
+<string>This app needs access to your local network</string>
+<key>NSBonjourServices</key>
+<array>
+  <string>_http._tcp</string>
+</array>
+```
+
+### Courier Marker Not Showing
+
+Ensure both `courierLat` and `courierLng` are provided. If either is `null`, the courier marker won't render.
+
+```dart
+// Correct - both provided
+courierLat: -6.195000,
+courierLng: 106.820000,
+
+// Incorrect - courier won't show
+courierLat: -6.195000,
+courierLng: null,
+```
+
+### Navigation Not Working
+
+The `map_launcher` package requires native map apps to be installed. Install a map application like Google Maps or Apple Maps on your device.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For issues, questions, or suggestions, please create an issue on the [GitHub repository](https://github.com/robilprogramer/courier_map_tracker).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+
+## Related Packages
+
+- [flutter_map](https://pub.dev/packages/flutter_map) - Interactive map widget
+- [map_launcher](https://pub.dev/packages/map_launcher) - Native map integration
+- [latlong2](https://pub.dev/packages/latlong2) - Geographic coordinates
+- [url_launcher](https://pub.dev/packages/url_launcher) - URL and phone launching
+
+---
+
+**Made with ❤️ for the Flutter community**
 
 ## Pemakaian dasar
 
