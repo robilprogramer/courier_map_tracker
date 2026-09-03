@@ -16,5 +16,6 @@
 ///   onDeliveryCompleted: () => print("Delivery done"),
 /// )
 /// ```
+library courier_map_tracker_lib;
 
 export 'courier_map_tracker.dart';

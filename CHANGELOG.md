@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.2
+
+* Fixed: Removed dangling library doc comment in `courier_map_tracker_lib.dart`.
+* Improved: Static analysis now passes all linting checks.
+
+## 1.0.1
+
+* Minor bug fixes and stability improvements.
+* Improved documentation.
+
 ## 1.0.0
 
 Rilis perdana `courier_map_tracker` dengan dokumentasi lengkap dan contoh aplikasi.
