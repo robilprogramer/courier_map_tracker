@@ -1,6 +1,6 @@
 name: courier_map_tracker
 description: Package Flutter untuk menampilkan pelacakan rute kurir dengan navigasi peta yang dinamis.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/robilprogramer/courier_map_tracker
 repository: https://github.com/robilprogramer/courier_map_tracker
 
